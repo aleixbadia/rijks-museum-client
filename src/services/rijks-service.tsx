@@ -11,7 +11,7 @@ class RijksService {
 
   getAll() {
     const pr = this.rijksApi
-      .get("?key=1cGiJiKL&p=16&ps=16")
+      .get("?key=1cGiJiKL&ps=16")
       .then((response) => response.data)
       .catch((err) => console.log("RijksService - getAll error => ", err));
     return pr;

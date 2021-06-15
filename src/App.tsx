@@ -30,7 +30,7 @@ function App(): JSX.Element {
         className="site-layout-background"
         style={{ position: 'fixed', zIndex: 1, width: '100%', textAlign: "center", color: "white" }}
       >
-        <img src={process.env.PUBLIC_URL + '/rijksmuseumshop-logo.png'} alt="logo" />
+        <img src={process.env.PUBLIC_URL + '/rijksmuseumshop-logo.png'} alt="logo" style={{ width: "35%", minWidth: "300px" }} />
       </Header>
       <Layout>
         <Sider
