@@ -1,10 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import rijksService from "../services/rijks-service";
-import { Card, Row, Col, Input, Tooltip } from "antd";
+import { Card, Input, Tooltip, Pagination } from "antd";
 import { InfoCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import GallerySkeleton from "../skeletons/Gallery-skeleton"
 
-const R = require("ramda");
 const { Meta } = Card;
 
 interface artObjInt {
@@ -39,13 +39,28 @@ interface artObjInt {
   productionPlaces: string[];
 }
 
-function Home(): JSX.Element {
+function Gallery(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(false);
   const [artObjects, setArtObjects] = useState<artObjInt[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<artObjInt[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [artObjPerPage] = useState<number>(8);
+
+  useEffect(() => {
+    setLoading(true);
+    rijksService.getAll().then((response) => {
+      if (response) {
+        setArtObjects(response.artObjects);
+        setSearchResults(response.artObjects);
+        setLoading(false);
+      }
+    });
+  }, []);
 
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    setCurrentPage(1);
     if (e.target.value !== "") {
       const filteredArtObjects: artObjInt[] = artObjects.filter(
         (artObj: artObjInt) => {
@@ -59,11 +74,12 @@ function Home(): JSX.Element {
     }
   };
 
-  useEffect(() => {
-    rijksService.getAll().then((response) => {
-      if (response) setArtObjects(response.artObjects);
-    });
-  });
+  const indOfLastArtObj: number = currentPage * artObjPerPage;
+  const indOfFirstArtObj: number = indOfLastArtObj - artObjPerPage;
+  const artObjsToDisplay = searchResults.slice(
+    indOfFirstArtObj,
+    indOfLastArtObj
+  );
 
   return (
     <div style={{ zIndex: -10 }}>
@@ -72,11 +88,11 @@ function Home(): JSX.Element {
         style={{
           color: "rgb(35, 32, 96)",
           border: "1px solid rgb(35, 32, 96)",
-          width: "50%",
+          width: "77%",
           position: "fixed",
-          left: "20%",
+          left: 210,
           top: 70,
-          zIndex: 5
+          zIndex: 5,
         }}
         prefix={<SearchOutlined className="site-form-item-icon" />}
         suffix={
@@ -87,9 +103,11 @@ function Home(): JSX.Element {
         value={searchTerm}
         onChange={searchHandler}
       />
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {searchResults.map((artObj: artObjInt): JSX.Element => {
-          return (
+      {!loading ? 
+      (<div style={{ display: "flex", flexWrap: "wrap" }}>
+      {artObjsToDisplay.map((artObj: artObjInt): JSX.Element => {
+        return (
+          <Fragment key={artObj.id}>
             <Link to={`/details/${artObj.objectNumber}`}>
               <Card
                 hoverable
@@ -102,39 +120,25 @@ function Home(): JSX.Element {
                 />
               </Card>
             </Link>
-          );
-        })}
-      </div>
-      {/* {R.splitEvery(
-        4,
-        searchResults.map((artObj: artObjInt): JSX.Element => {
-          return (
-            <Link to={`/details/${artObj.objectNumber}`}>
-              <Card
-                hoverable
-                style={{ width: 240, margin: 10 }}
-                cover={<img alt={artObj.title} src={artObj.webImage.url} />}
-              >
-                <Meta title={artObj.title} description={`by: ${artObj.principalOrFirstMaker}`} />
-              </Card>
-            </Link>
-          );
-        })
-      ).map((row: artObjInt[]): JSX.Element => {
-        return (
-          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-            {row.map((artObjCard): JSX.Element => {
-              return (
-                <Col className="gutter-row" span={6}>
-                  {artObjCard}
-                </Col>
-              );
-            })}
-          </Row>
+          </Fragment>
         );
-      })} */}
+      })}
+    </div>)
+      :
+      (<GallerySkeleton/>)
+      }
+      <Pagination
+        defaultCurrent={1}
+        current={currentPage}
+        total={Math.ceil(searchResults.length / artObjPerPage) * 10}
+        style={{ marginLeft: "35%" }}
+        onChange={(page) => {
+          setCurrentPage(page);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
     </div>
   );
 }
 
-export default Home;
+export default Gallery;

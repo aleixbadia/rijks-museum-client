@@ -1,24 +1,20 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Switch, Route, Link } from "react-router-dom";
+import backgroundRoyal from "./images/royal_pattern.jpg";
 
-import Home from "./pages/Home";
-import Details from "./pages/Details";
+import Gallery from "./components/Gallery";
+import Details from "./components/Details";
+import Donate from "./components/Donate";
 import "./App.css";
 
 import { Layout, Menu } from "antd";
-import {
-  DesktopOutlined,
-  HomeOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { PictureOutlined, FileOutlined, TeamOutlined } from "@ant-design/icons";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 function App(): JSX.Element {
-  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<boolean>(true);
 
   const onCollapse = (collapsed: boolean) => {
     setCollapsed(collapsed);
@@ -28,9 +24,21 @@ function App(): JSX.Element {
     <Layout style={{ minHeight: "100vh" }}>
       <Header
         className="site-layout-background"
-        style={{ position: 'fixed', zIndex: 1, width: '100%', textAlign: "center", color: "white" }}
+        style={{
+          position: "fixed",
+          zIndex: 1,
+          width: "100%",
+          textAlign: "center",
+          color: "white",
+        }}
       >
-        <img src={process.env.PUBLIC_URL + '/rijksmuseumshop-logo.png'} alt="logo" style={{ width: "35%", minWidth: "300px" }} />
+        <Link to={`/`}>
+          <img
+            src={process.env.PUBLIC_URL + "/rijksmuseumshop-logo.png"}
+            alt="logo"
+            style={{ width: "35%", minWidth: "300px" }}
+          />
+        </Link>
       </Header>
       <Layout>
         <Sider
@@ -47,39 +55,49 @@ function App(): JSX.Element {
         >
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-            <Menu.Item key="1" icon={<HomeOutlined />}>
-              <Link to={`/`}>Home</Link>
+            <Menu.Item key="1" icon={<PictureOutlined />}>
+              <Link to={`/`}>Gallery</Link>
             </Menu.Item>
-
-            <Menu.Item key="2" icon={<DesktopOutlined />}>
-              Option 2
-            </Menu.Item>
-            <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-              <Menu.Item key="3">Tom</Menu.Item>
-              <Menu.Item key="4">Bill</Menu.Item>
-              <Menu.Item key="5">Alex</Menu.Item>
+            <SubMenu key="sub1" icon={<TeamOutlined />} title="Team">
+              <Menu.Item key="2">Team 1</Menu.Item>
+              <Menu.Item key="3">Team 2</Menu.Item>
             </SubMenu>
-            <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-              <Menu.Item key="6">Team 1</Menu.Item>
-              <Menu.Item key="8">Team 2</Menu.Item>
-            </SubMenu>
-            <Menu.Item key="9" icon={<FileOutlined />}>
-              Files
+            <Menu.Item key="4" icon={<FileOutlined />}>
+              <Link to={`/donate`}>Donate</Link>
             </Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">
-          <Content style={{ margin: '50px 192px 0', overflow: 'initial', width: '80vw' }}>
-            <div
-              className="site-layout-background"
-              style={{ padding: 24, minHeight: 360 }}
+          <div style={{ backgroundImage: `url(${backgroundRoyal})` }}>
+            <Content
+              style={{
+                margin: "90px 190px 60px",
+                paddingTop: "20px",
+                overflow: "initial",
+                width: "80vw",
+              }}
             >
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/details/:objectNumber" component={Details} />
-              </Switch>
-            </div>
-          </Content>
+              <div
+                className="site-layout-content"
+                style={{
+                  padding: 24,
+                  minHeight: 360,
+                  backgroundColor: "white",
+                  // backgroundImage: `url(${backgroundRoyal})`,
+                }}
+              >
+                <Switch>
+                  <Route exact path="/" component={Gallery} />
+                  <Route
+                    exact
+                    path="/details/:objectNumber"
+                    component={Details}
+                  />
+                  <Route exact path="/donate" component={Donate} />
+                </Switch>
+              </div>
+            </Content>
+          </div>
           <Footer style={{ textAlign: "center" }}>
             PXL.Widgets - Rijks project by Aleix Badia
           </Footer>

@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import rijksService from "../services/rijks-service";
-import { Skeleton, Image, Typography } from "antd";
+import { Image, Typography } from "antd";
+import DetailsSkeleton from "../skeletons/Details-skeleton";
 
 const { Title } = Typography;
 
@@ -129,16 +130,29 @@ function Details(): JSX.Element {
         <>
           <Title>{artObject.title}</Title>
           <Title level={2}>by {artObject.principalMaker}</Title>
-          <Image width={400} src={artObject.webImage.url} />
-          <p>{artObject.description}</p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "justify",
+              textJustify: "inter-word",
+            }}
+          >
+            <Image
+              style={{ minWidth: "150px", maxWidth: "300px" }}
+              src={artObject.webImage.url}
+            />
+            <div style={{ width: "50%", marginLeft: "5%" }}>
+              <h4>{artObject.description}</h4>
+            </div>
+          </div>
         </>
       ) : (
-        <Skeleton active />
+        <DetailsSkeleton />
       )}
     </Fragment>
   );
 }
 
 export default Details;
-
-
