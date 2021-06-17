@@ -112,7 +112,7 @@ function Gallery(): JSX.Element {
               <Card
                 hoverable
                 style={{ width: 240, margin: 10 }}
-                cover={<img alt={artObj.title} src={artObj.webImage.url} />}
+                cover={<img alt={artObj.title} src={artObj.webImage.url} style={{ height: 250, objectFit: "cover" }}/>}
               >
                 <Meta
                   title={artObj.title}
