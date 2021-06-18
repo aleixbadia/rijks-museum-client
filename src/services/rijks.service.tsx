@@ -4,14 +4,14 @@ class RijksService {
   rijksApi: AxiosInstance;
   constructor() {
     this.rijksApi = axios.create({
-      baseURL: `https://www.rijksmuseum.nl/api/en/collection`,
+      baseURL: `http://localhost:5000/artObj`,
       withCredentials: false,
     });
   }
 
   getAll() {
     const pr = this.rijksApi
-      .get("?key=1cGiJiKL&ps=16")
+      .get("/getAllArtObj")
       .then((response) => response.data)
       .catch((err) => console.log("RijksService - getAll error => ", err));
     return pr;
@@ -19,9 +19,9 @@ class RijksService {
 
   getByObjectNumber(id: string) {
     const pr = this.rijksApi
-      .get(`/${id}?key=1cGiJiKL`)
+      .get(`/getByObjNum/${id}`)
       .then((response) => response.data)
-      .catch((err) => console.log("RijksService - getById error => ", err));
+      .catch((err) => console.log("RijksService - getByObjectNumber error => ", err));
     return pr;
   }
 }

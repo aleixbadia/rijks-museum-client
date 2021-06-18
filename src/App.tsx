@@ -5,6 +5,8 @@ import backgroundRoyal from "./images/royal_pattern.jpg";
 import Gallery from "./components/Gallery";
 import Details from "./components/Details";
 import Donate from "./components/Donate";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 import "./App.css";
 
 import { Layout, Menu } from "antd";
@@ -59,8 +61,8 @@ function App(): JSX.Element {
               <Link to={`/`}>Gallery</Link>
             </Menu.Item>
             <SubMenu key="sub1" icon={<TeamOutlined />} title="Team">
-              <Menu.Item key="2">Team 1</Menu.Item>
-              <Menu.Item key="3">Team 2</Menu.Item>
+              <Menu.Item key="2"><Link to={`/login`}>Login</Link></Menu.Item>
+              <Menu.Item key="3"><Link to={`/signup`}>Sign up</Link></Menu.Item>
             </SubMenu>
             <Menu.Item key="4" icon={<FileOutlined />}>
               <Link to={`/donate`}>Donate</Link>
@@ -93,6 +95,8 @@ function App(): JSX.Element {
                     path="/details/:objectNumber"
                     component={Details}
                   />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/signup" component={Signup} />
                   <Route exact path="/donate" component={Donate} />
                 </Switch>
               </div>

@@ -1,43 +1,12 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
-import rijksService from "../services/rijks-service";
+import rijksService from "../services/rijks.service";
 import { Card, Input, Tooltip, Pagination } from "antd";
 import { InfoCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import GallerySkeleton from "../skeletons/Gallery-skeleton"
+import {artObjInt} from "../interfaces/ArtObj.interface";
 
 const { Meta } = Card;
-
-interface artObjInt {
-  links: {
-    self: string;
-    web: string;
-  };
-  id: string;
-  objectNumber: string;
-  title: string;
-  hasImage: boolean;
-  principalOrFirstMaker: string;
-  longTitle: string;
-  showImage: boolean;
-  permitDownload: boolean;
-  webImage: {
-    guid: string;
-    offsetPercentageX: number;
-    offsetPercentageY: number;
-    width: number;
-    height: number;
-    url: string;
-  };
-  headerImage: {
-    guid: string;
-    offsetPercentageX: number;
-    offsetPercentageY: number;
-    width: number;
-    height: number;
-    url: string;
-  };
-  productionPlaces: string[];
-}
 
 function Gallery(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,8 +20,8 @@ function Gallery(): JSX.Element {
     setLoading(true);
     rijksService.getAll().then((response) => {
       if (response) {
-        setArtObjects(response.artObjects);
-        setSearchResults(response.artObjects);
+        setArtObjects(response);
+        setSearchResults(response);
         setLoading(false);
       }
     });
@@ -106,6 +75,7 @@ function Gallery(): JSX.Element {
       {!loading ? 
       (<div style={{ display: "flex", flexWrap: "wrap" }}>
       {artObjsToDisplay.map((artObj: artObjInt): JSX.Element => {
+        console.log(artObj);
         return (
           <Fragment key={artObj.id}>
             <Link to={`/details/${artObj.objectNumber}`}>
