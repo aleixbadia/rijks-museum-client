@@ -1,23 +1,37 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import rijksService from "../services/rijks.service";
-import { Image, Typography } from "antd";
+import userService from "../services/user.service";
+import authService from "../services/auth.service";
+import { Image, Typography, Button } from "antd";
 import DetailsSkeleton from "../skeletons/Details-skeleton";
 import { artObjDetInt } from "../interfaces/ArtObj.interface";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 function Details(): JSX.Element {
   const [artObject, setArtObject] = useState<artObjDetInt | null>(null);
+  const [isAdded, setIsAdded] = useState<boolean>(false);
 
   useEffect(() => {
     rijksService.getByObjectNumber(params.objectNumber).then((response) => {
       if (response) {
-        console.log(response);
         setArtObject(response);
       }
     });
-  });
+  }, []);
+
+  const handleAddClick = () => {
+    if (artObject) {
+      authService.me().then((response) => {
+        if (response) {
+          userService.addToFavs(artObject.objectNumber).then(() => {
+            setIsAdded(true);
+          });
+        }
+      });
+    }
+  };
 
   const params: { objectNumber: string } = useParams();
   return (
@@ -25,7 +39,7 @@ function Details(): JSX.Element {
       {artObject ? (
         <>
           <Title>{artObject.title}</Title>
-          <Title level={2}>by {artObject.principalMaker}</Title>
+          <Title level={2}>by {artObject.principalOrFirstMaker}</Title>
           <div
             style={{
               display: "flex",
@@ -41,6 +55,18 @@ function Details(): JSX.Element {
             />
             <div style={{ width: "50%", marginLeft: "5%" }}>
               <h4>{artObject.description}</h4>
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <Button onClick={handleAddClick}>Add to favourites</Button>
+                {isAdded ? (
+                  <Text type="success" style={{ marginLeft: "40px" }}>Art object added to your list</Text>
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
           </div>
         </>

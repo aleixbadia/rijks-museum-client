@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Switch, Route, Link, withRouter } from "react-router-dom";
 import backgroundRoyal from "./images/royal_pattern.jpg";
+import authService from "./services/auth.service";
 
 import Gallery from "./components/Gallery";
 import Details from "./components/Details";
@@ -17,10 +18,27 @@ const { SubMenu } = Menu;
 
 function App(): JSX.Element {
   const [collapsed, setCollapsed] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
 
   const onCollapse = (collapsed: boolean) => {
     setCollapsed(collapsed);
   };
+
+  const logout = () => {
+    authService.logout().then((response) => {
+      if (response === "success") setIsLoggedIn(false);
+    });
+  };
+
+  useEffect(() => {
+    authService.me().then((response) => {
+      if (!response) {
+        setIsLoggedIn(false);
+      } else {
+        setIsLoggedIn(true);
+      }
+    });
+  });
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -56,13 +74,43 @@ function App(): JSX.Element {
           }}
         >
           <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+          <Menu
+            theme="dark"
+            defaultSelectedKeys={["1"]}
+            mode="inline"
+            selectable={false}
+          >
             <Menu.Item key="1" icon={<PictureOutlined />}>
               <Link to={`/`}>Gallery</Link>
             </Menu.Item>
             <SubMenu key="sub1" icon={<TeamOutlined />} title="Team">
-              <Menu.Item key="2"><Link to={`/login`}>Login</Link></Menu.Item>
-              <Menu.Item key="3"><Link to={`/signup`}>Sign up</Link></Menu.Item>
+              <Menu.Item key="2">
+                {isLoggedIn ? (
+                  <Link to={`/favourites`}>Favourite art objects</Link>
+                ) : (
+                  <Link to={`/login`}>Login</Link>
+                )}
+              </Menu.Item>
+              <Menu.Item key="3">
+                {isLoggedIn ? (
+                  <button
+                    onClick={logout}
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "inherit",
+                      border: "none",
+                      padding: 0,
+                      font: "inherit",
+                      cursor: "pointer",
+                      outline: "inherit",
+                    }}
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <Link to={`/signup`}>Sign up</Link>
+                )}
+              </Menu.Item>
             </SubMenu>
             <Menu.Item key="4" icon={<FileOutlined />}>
               <Link to={`/donate`}>Donate</Link>
@@ -89,7 +137,13 @@ function App(): JSX.Element {
                 }}
               >
                 <Switch>
-                  <Route exact path="/" component={Gallery} />
+                  <Route
+                    exact
+                    path="/"
+                    render={(routeProps) => (
+                      <Gallery {...routeProps} key="1" isFavourites={false} />
+                    )}
+                  />
                   <Route
                     exact
                     path="/details/:objectNumber"
@@ -97,6 +151,14 @@ function App(): JSX.Element {
                   />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/signup" component={Signup} />
+                  <Route
+                    exact
+                    path="/favourites"
+                    render={(routeProps) => (
+                      <Gallery {...routeProps} key="2" isFavourites={true} />
+                    )}
+                  />
+
                   <Route exact path="/donate" component={Donate} />
                 </Switch>
               </div>
@@ -111,4 +173,4 @@ function App(): JSX.Element {
   );
 }
 
-export default App;
+export default withRouter(App);

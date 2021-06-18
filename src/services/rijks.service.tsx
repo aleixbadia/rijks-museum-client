@@ -5,7 +5,7 @@ class RijksService {
   constructor() {
     this.rijksApi = axios.create({
       baseURL: `http://localhost:5000/artObj`,
-      withCredentials: false,
+      withCredentials: true,
     });
   }
 
@@ -24,8 +24,16 @@ class RijksService {
       .catch((err) => console.log("RijksService - getByObjectNumber error => ", err));
     return pr;
   }
+
+  getAllFavs() {
+    const pr = this.rijksApi
+      .get("/getAllFavs")
+      .then((response) => response.data)
+      .catch((err) => console.log("RijksService - getAllFavs error => ", err));
+    return pr;
+  }
 }
 
-const brandService = new RijksService();
+const rijksService = new RijksService();
 
-export default brandService;
+export default rijksService;

@@ -1,11 +1,11 @@
 import axios, { AxiosInstance } from "axios";
 
-class RijksService {
+class AuthService {
   rijksApi: AxiosInstance;
   constructor() {
     this.rijksApi = axios.create({
       baseURL: `http://localhost:5000/auth`,
-      withCredentials: false,
+      withCredentials: true,
     });
   }
 
@@ -36,13 +36,14 @@ class RijksService {
   me() {
     const pr = this.rijksApi
       .get("/me")
-      .then((response) => response.data)
+      .then((response) => {
+        return response.data})
       .catch((err) => console.log("auth-service - me error => ", err));
 
     return pr;
   }
 }
 
-const brandService = new RijksService();
+const authService = new AuthService();
 
-export default brandService;
+export default authService;
