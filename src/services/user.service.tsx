@@ -4,7 +4,7 @@ class UserService {
   rijksApi: AxiosInstance;
   constructor() {
     this.rijksApi = axios.create({
-      baseURL: `http://localhost:5000/user`,
+      baseURL: `${process.env.REACT_APP_API_URL}/user`,
       withCredentials: true,
     });
   }

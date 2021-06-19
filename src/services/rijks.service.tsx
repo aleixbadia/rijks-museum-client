@@ -4,7 +4,7 @@ class RijksService {
   rijksApi: AxiosInstance;
   constructor() {
     this.rijksApi = axios.create({
-      baseURL: `http://localhost:5000/artObj`,
+      baseURL: `${process.env.REACT_APP_API_URL}/artObj`,
       withCredentials: true,
     });
   }
