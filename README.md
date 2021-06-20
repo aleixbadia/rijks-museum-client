@@ -38,5 +38,3 @@ The development is based on MERN, Typescript and Antdesign. The deployment has b
 Url to repository and to deployed project
 
 [Repository Link](https://github.com/aleixbadia/rijks-museum-client)
-
-[Deploy Link]()
