@@ -6,7 +6,7 @@ Welcome to the Rijk Museum Art Gallery
 
 On this web application you will find a display of some of the art objects present in the Rijk Museum. Here you will be able to search them by name or maker and also add them to you list of favourite art objects.
 
-The development is based on MERN, Typescript and Antdesign. The deployment has been done on Heroku.
+The development is based on MERN, Typescript and Antdesign.
 
 ## User stories - Client
 
@@ -38,5 +38,3 @@ The development is based on MERN, Typescript and Antdesign. The deployment has b
 Url to repository and to deployed project
 
 [Repository Link](https://github.com/aleixbadia/rijks-museum-client)
-
-[Deploy Link]()
