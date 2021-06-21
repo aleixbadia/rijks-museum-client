@@ -13,6 +13,7 @@
     "@types/react-router-dom": "^5.1.7",
     "antd": "^4.16.2",
     "axios": "^0.21.1",
+    "dotenv": "^10.0.0",
     "ramda": "^0.27.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -27,7 +28,8 @@
     "build-prod": "dotenv -e .env.production react-scripts build",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": [
@@ -46,5 +48,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "heroku-run-build-script": true
 }
