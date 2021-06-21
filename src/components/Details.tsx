@@ -19,6 +19,7 @@ function Details(): JSX.Element {
         setArtObject(response);
       }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddClick = () => {

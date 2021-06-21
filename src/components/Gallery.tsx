@@ -41,6 +41,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({ isFavourites }) => {
         }
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
